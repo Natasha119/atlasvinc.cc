@@ -2,6 +2,7 @@ const http = require("https");
 const fs = require("fs");
 const stream = require("stream");
 const  serveFile  = require("./serveFile.js");
+const wss = require("./websocketserver.js");
 
 const HTTPSServerOptions = {
     key: fs.readFileSync("/etc/letsencrypt/live/natasha119.com/privkey.pem"),
