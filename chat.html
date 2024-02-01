@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>W.I.P</title>
+        <link rel="stylesheet" type="text/css" href="stylesheet.css"/>
+    </head>
+    <body>
+        <h1>Some sort of chat thing in dev some time maybe (20:59 2024-01-31)</h1>
+        
+        <form id="chatbox">
+            <label for="chatmessage">Send a message!</label>
+            <input type="text" name="chatmessage">
+            <input type="submit" value="Send it!">
+        </form>
+
+        <script>
+            const chatbox = document.getElementById("chatbox");
+            chatbox.addEventListener("submit", function ChatboxOnSubmit(event) 
+            {
+                event.preventDefault();
+
+                /* DEVLOG 23:28 2024-01-31: /*
+                so we're gonna use the ws library here,
+                because not even I have the time or determination 
+                to basically re-implement the websocket protocol. 
+                Jeezus. */
+            });
+        </script>
+    </body>
+</html>
