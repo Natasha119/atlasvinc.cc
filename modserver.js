@@ -1,8 +1,8 @@
 const http = require("https");
 const fs = require("fs");
 const stream = require("stream");
-const  serveFile  = require("./serveFile.js");
-const wss = require("./websocketserver.js");
+const serveFile  = require("./serveFile.js");
+const ws = require("ws");
 
 const HTTPSServerOptions = {
     key: fs.readFileSync("/etc/letsencrypt/live/natasha119.com/privkey.pem"),
@@ -10,6 +10,8 @@ const HTTPSServerOptions = {
 };
 
 const server = http.createServer(HTTPSServerOptions);
+
+const wsserver = new ws.WebSocketServer({server});
 
 const ReplaceHurpDurp = new stream.Transform({
     transform(chunk, encoding, callback)
@@ -27,5 +29,16 @@ server.on("request", function HTTPSServerRequest(req, res)
     }
     serveFile(req, res, req.url);
 });
+
+wsserver.on("connection", function wssOnConnection(ws)
+{
+    ws.on("error", console.error);
+
+    ws.on("message", function wsOnMessage(data)
+    {
+        console.log(`Recieved data from a socket: ${data}`);
+        ws.send("Acknowledged, friend Socket. Your message has been recieved!");
+    });
+})
 
 server.listen(8822);
