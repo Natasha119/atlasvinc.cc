@@ -30,14 +30,26 @@ server.on("request", function HTTPSServerRequest(req, res)
     serveFile(req, res, req.url);
 });
 
+var socketConnections = [];
+
 wsserver.on("connection", function wssOnConnection(ws)
 {
+    socketConnections.push(ws);
     ws.on("error", console.error);
 
     ws.on("message", function wsOnMessage(data)
     {
-        console.log(`Recieved data from a socket: ${data}`);
-        ws.send("Acknowledged, friend Socket. Your message has been recieved!");
+        let dataJSON = JSON.parse(data);
+
+        if(dataJSON.mtype == "createMessage")
+        {
+            let messageJSON = {mtype: "messageRecieved", message: dataJSON.message}
+            for(socket in socketConnections)
+            {
+                socketConnections[socket].send(JSON.stringify(messageJSON));
+
+            }
+        }
     });
 })
 

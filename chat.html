@@ -3,10 +3,30 @@
     <head>
         <title>W.I.P</title>
         <link rel="stylesheet" type="text/css" href="stylesheet.css"/>
+        <script>
+            const chatws = new WebSocket("wss://atlasvinc.cc:8822");
+
+            chatws.addEventListener("message", function chatwsOnMessage(data)
+            {
+                let messageObject = JSON.parse(data.data);
+
+                if(messageObject.mtype == "messageRecieved")
+                {
+                    let newMessage = document.createElement("p")
+                    newMessage.innerText = messageObject.message;
+
+                    document.getElementById("messages").appendChild(newMessage);
+                }
+            });
+        </script>
     </head>
     <body>
         <h1>Some sort of chat thing in dev some time maybe (20:59 2024-01-31)</h1>
         
+        <div id="messages">
+        
+        </div>
+
         <form id="chatbox">
             <label for="chatmessage">Send a message!</label>
             <input type="text" name="chatmessage">
