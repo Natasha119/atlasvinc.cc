@@ -15,36 +15,50 @@
                     let newMessage = document.createElement("p")
                     newMessage.innerText = messageObject.message;
 
-                    document.getElementById("messages").appendChild(newMessage);
+                    let messages = document.getElementById("messages");
+                    messages.insertBefore(newMessage, messages.children[messages.children.length - 1]);
+
+                    document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
                 }
             });
         </script>
+        <style>
+            #chatbox {
+                bottom: 0px;
+            }
+            #messages {
+                overflow-y: scroll;
+            }
+        </style>
     </head>
     <body>
         <h1>Some sort of chat thing in dev some time maybe (20:59 2024-01-31)</h1>
         
         <div id="messages">
-        
+            <form id="chatbox">
+                <label for="chatmessage">Send a message!</label>
+                <input type="text" name="chatmessage">
+                <input type="submit" value="Send it!">
+            </form>
         </div>
 
-        <form id="chatbox">
-            <label for="chatmessage">Send a message!</label>
-            <input type="text" name="chatmessage">
-            <input type="submit" value="Send it!">
-        </form>
 
         <script>
+            document.getElementById("messages").style.height = `${document.documentElement.clientHeight -200}px`;
+
             const chatbox = document.getElementById("chatbox");
             chatbox.addEventListener("submit", function ChatboxOnSubmit(event) 
             {
                 event.preventDefault();
                 
                 let newMessage = new FormData(chatbox).get("chatmessage");
-
+                
                 chatws.send(JSON.stringify({
                     mtype: "createMessage",
                     message: newMessage
                 }));
+                
+                chatbox.getElementsByTagName("input").namedItem("chatmessage").value = "";
             });
         </script>
     </body>

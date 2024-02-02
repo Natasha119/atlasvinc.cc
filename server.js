@@ -35,7 +35,11 @@ wsserver.on("connection", function wssOnConnection(ws, req)
 
         if(dataJSON.mtype == "createMessage")
         {
-            let messageJSON = {mtype: "messageRecieved", message: req.socket.remoteAddress + ": " + dataJSON.message}
+            let messageJSON = {
+                mtype: "messageRecieved", 
+                message: req.socket.remoteAddress + ": " + dataJSON.message
+            }
+
             wsserver.clients.forEach(socket => socket.send(JSON.stringify(messageJSON)));
         }
     });
