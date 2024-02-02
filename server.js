@@ -11,7 +11,7 @@ const HTTPSServerOptions = {
 
 const server = http.createServer(HTTPSServerOptions);
 
-const wsserver = new ws.WebSocketServer({server});
+const wsserver = new ws.WebSocketServer({server: server, clientTracking: true});
 
 const ReplaceHurpDurp = new stream.Transform({
     transform(chunk, encoding, callback)
@@ -22,19 +22,11 @@ const ReplaceHurpDurp = new stream.Transform({
 
 server.on("request", function HTTPSServerRequest(req, res)
 {
-    if (req.url.match(/^\/chatapi\/newmessage/))
-    {
-        res.writeHead(200, "Chat API in active development uwu");
-        return res.end();
-    }
     serveFile(req, res, req.url);
 });
 
-var socketConnections = [];
-
-wsserver.on("connection", function wssOnConnection(ws)
+wsserver.on("connection", function wssOnConnection(ws, req)
 {
-    socketConnections.push(ws);
     ws.on("error", console.error);
 
     ws.on("message", function wsOnMessage(data)
@@ -43,14 +35,10 @@ wsserver.on("connection", function wssOnConnection(ws)
 
         if(dataJSON.mtype == "createMessage")
         {
-            let messageJSON = {mtype: "messageRecieved", message: dataJSON.message}
-            for(socket in socketConnections)
-            {
-                socketConnections[socket].send(JSON.stringify(messageJSON));
-
-            }
+            let messageJSON = {mtype: "messageRecieved", message: req.socket.remoteAddress + ": " + dataJSON.message}
+            wsserver.clients.forEach(socket => socket.send(JSON.stringify(messageJSON)));
         }
     });
-})
+});
 
 server.listen(8822);
