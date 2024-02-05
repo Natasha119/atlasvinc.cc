@@ -2,29 +2,9 @@
 <html>
     <head>
         <title>W.I.P</title>
+
         <link rel="stylesheet" type="text/css" href="/stylesheet.css"/>
-        <script>
-            const chatws = new WebSocket("wss://" + window.location.hostname);
 
-            chatws.addEventListener("message", function chatwsOnMessage(data)
-            {
-                let messageObject = JSON.parse(data.data);
-                let messageType = messageObject.mtype;
-                let messageContent = messageObject.message;
-
-                if(messageType == "messageRecieved")
-                {
-                    let messages = document.getElementById("messages");
-
-                    let newMessage = document.createElement("p");
-                    newMessage.innerText = messageContent;
-
-                    messages.insertBefore(newMessage, messages.children[messages.children.length -1]);
-
-                    document.getElementById("messages").scrollTop = document.getElementById("messages").scrollHeight;
-                }
-            });
-        </script>
         <style>
             #chatbox {
                 bottom: 0px;
@@ -35,41 +15,30 @@
         </style>
     </head>
     <body>
-        <p style="text-align: center;">
-            Your activity in this chat room is not saved AS OF 00:01 2024-02-02. This site will eventually become more fully featured,<br/>
-            and your messages, <strong>along with your IP address</strong>, will be stored in a database.<br/>
-            <a href="https://github.com/Natasha119/atlasvinc.cc/">The entire website, including this application</a>, is <a href="https://en.wikipedia.org/wiki/Free_and_open-source_software">free and open-source software</a>, and you can see exactly what goes on behind the scenes if you are concerned about privacy at the provided Github repository.<br/>
-            I, James B., will NEVER revel your IP address to anybody, and is only stored for any access control needs, such as banning problematic people, whitelist/blacklist, etc.<br/>
-            Your IP will never be stored simply by connecting to this website. It is only if you <strong>send a message</strong>, that your IP address will be collected.<br/>
-            Happy chatting.
-        </p>
-        
-        <div id="messages">
-            <form id="chatbox">
-                <label for="chatmessage">Send a message!</label>
-                <input type="text" name="chatmessage">
-                <input type="submit" value="Send it!">
-            </form>
+        <div id="sidebar">
+
         </div>
 
+        <div id="mainmain">
+            <p style="text-align: center;">
+            Your activity in this chat room is not saved AS OF 00:01 2024-02-02. This site will eventually become more fully featured,<br/>
+            and your messages, <strong>along with your IP address</strong>, will be stored in a database.<br/>
+                <a href="https://github.com/Natasha119/atlasvinc.cc/">The entire website, including this application</a>, is <a href="https://en.wikipedia.org/wiki/Free_and_open-source_software">free and open-source software</a>, and you can see exactly what goes on behind the scenes if you are concerned about privacy at the provided Github repository.<br/>
+                I, James B., will NEVER revel your IP address to anybody, and is only stored for any access control needs, such as banning problematic people, whitelist/blacklist, etc.<br/>
+                Your IP will never be stored simply by connecting to this website. It is only if you <strong>send a message</strong>, that your IP address will be collected.<br/>
+                Happy chatting.
+            </p>
+            
+            <div id="messages">
+                <form id="chatbox">
+                    <label for="chatmessage">Send a message!</label>
+                    <input type="text" name="chatmessage">
+                    <input type="submit" value="Send it!">
+                </form>
+            </div>
 
-        <script>
-            document.getElementById("messages").style.height = `${document.documentElement.clientHeight -200}px`;
-
-            const chatbox = document.getElementById("chatbox");
-            chatbox.addEventListener("submit", function ChatboxOnSubmit(event) 
-            {
-                event.preventDefault();
-                
-                let newMessage = new FormData(chatbox).get("chatmessage");
-                
-                chatws.send(JSON.stringify({
-                    mtype: "createMessage",
-                    message: newMessage
-                }));
-                
-                chatbox.getElementsByTagName("input").namedItem("chatmessage").value = "";
-            });
-        </script>
+            
+            <script src="/chat/script.js"></script>
+        </div>
     </body>
 </html>
