@@ -1,19 +1,13 @@
-var fs = require("fs");
+const fs = require("fs");
 
-function serveFile(req, res, path)
+function readStream(req, res, path)
 {
-    var file = fs.createReadStream(__dirname + path, {highWaterMark:1023});
+    const file = fs.createReadStream(__dirname + path, {highWaterMark:1024});
 
-    file.on("error", function onError(err){
-        if (err.message.substring(-1,6) == "ENOENT")
-        {
-            res.writeHead(404);
-            res.end();
-        }
-        else
-        {
-            res.writeHead(err.message);
-        }
+    file.on("error", function onError(error)
+    {
+        res.write(error.message);
+        res.end();
     });
 
     file.on("data", function onData(chunk)
@@ -25,6 +19,27 @@ function serveFile(req, res, path)
     {
         res.end();
     });
+};
+
+function serveFile(req, res, path)
+{
+    fs.stat(__dirname + req.url, function stat(error, stats){
+        
+        if(error != null && error.code == "ENOENT")
+        {
+            res.write(error.message);
+            res.end();
+        }
+        else
+        if(stats.isDirectory())
+        {
+            readStream(req, res, path + "/index.html");
+        }
+        else
+        {
+            readStream(req, res, path);
+        }
+    }); 
 };
 
 module.exports = serveFile;
