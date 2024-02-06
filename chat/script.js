@@ -18,19 +18,20 @@ chatws.addEventListener("message", function chatwsOnMessage(data)
     }
 });
 
-document.getElementById("messages").style.height = `${document.documentElement.clientHeight -250}px`;
+document.getElementById("messages").style.height = `${document.documentElement.clientHeight - document.getElementById("important").offsetHeight - 200}px`;
+document.getElementById("important").hei
 
-            const chatbox = document.getElementById("chatbox");
-            chatbox.addEventListener("submit", function ChatboxOnSubmit(event) 
-            {
-                event.preventDefault();
-                
-                let newMessage = new FormData(chatbox).get("chatmessage");
-                
-                chatws.send(JSON.stringify({
-                    mtype: "createMessage",
-                    message: newMessage
-                }));
-                
-                chatbox.getElementsByTagName("input").namedItem("chatmessage").value = "";
-            });
+const chatbox = document.getElementById("chatbox");
+chatbox.addEventListener("submit", function ChatboxOnSubmit(event) 
+{
+    event.preventDefault();
+    
+    let newMessage = new FormData(chatbox).get("chatmessage");
+    
+    chatws.send(JSON.stringify({
+        mtype: "createMessage",
+        message: newMessage
+    }));
+    
+    chatbox.getElementsByTagName("input").namedItem("chatmessage").value = "";
+});
