@@ -1,3 +1,5 @@
+document.getElementById("messages").style.height = `${document.documentElement.clientHeight - document.getElementById("important").offsetHeight - 100}px`;
+
 const chatws = new WebSocket("wss://" + window.location.hostname);
 
 chatws.addEventListener("message", function chatwsOnMessage(data)
@@ -19,8 +21,6 @@ chatws.addEventListener("message", function chatwsOnMessage(data)
     }
 });
 
-document.getElementById("messages").style.height = `${document.documentElement.clientHeight - document.getElementById("important").offsetHeight - 200}px`;
-document.getElementById("important").hei
 
 const chatbox = document.getElementById("chatbox");
 chatbox.addEventListener("submit", function ChatboxOnSubmit(event) 
