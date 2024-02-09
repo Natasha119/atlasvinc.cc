@@ -10,6 +10,7 @@ chatws.addEventListener("message", function chatwsOnMessage(data)
     {
         let messages = document.getElementById("messages");
 
+
         let newMessage = document.createElement("p");
         newMessage.innerText = messageContent;
 
@@ -26,11 +27,13 @@ chatbox.addEventListener("submit", function ChatboxOnSubmit(event)
 {
     event.preventDefault();
     
-    let newMessage = new FormData(chatbox).get("chatmessage");
-    
+    let message = new FormData(chatbox).get("chatmessage");
+    let messageAuthor = document.getElementById("nameinput").value; 
+
     chatws.send(JSON.stringify({
         mtype: "createMessage",
-        message: newMessage
+        messageAuthor: messageAuthor || "No Name",
+        message: message
     }));
     
     chatbox.getElementsByTagName("input").namedItem("chatmessage").value = "";

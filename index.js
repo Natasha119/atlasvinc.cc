@@ -37,7 +37,7 @@ wsserver.on("connection", function wssOnConnection(ws, req)
         {
             let messageJSON = {
                 mtype: "messageRecieved", 
-                message: "Somebody: " + dataJSON.message
+                message: dataJSON.messageAuthor + ": " + dataJSON.message
             }
 
             wsserver.clients.forEach(socket => socket.send(JSON.stringify(messageJSON)));
